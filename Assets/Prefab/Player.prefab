@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -7445327459811680565}
   - component: {fileID: 5427342860221370230}
   - component: {fileID: 2069281435746121886}
+  - component: {fileID: 7339003776374643997}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -129,6 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8118c61392389f4f97cd01126e94bf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 0
 --- !u!114 &2069281435746121886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,9 +156,33 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 97ebe9b1-a4cf-4e90-be7a-e21defc3c61f
+    m_ActionName: Movement/Basic Movement
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3d28180d-25c2-480d-9998-593013502ebe
+    m_ActionName: Movement/Pause
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 897c6184-86c2-4cfd-91d0-fc44112472a6
+    m_ActionName: Movement/Grab
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Movement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &7339003776374643997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434772352251022836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9331adb4c047eeb4490e0dd4bd0d5709, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

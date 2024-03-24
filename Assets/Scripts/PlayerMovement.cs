@@ -1,22 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Components")]
+    [SerializeField]
+    [Tooltip("Player inputs")]
+    PlayerInput PInput;
+
+    [Header("Variables")]
+    [SerializeField]
+    [Tooltip("Player Speed")]
+    float speed;
+
+    Vector3Int adjustedPlayerPos;
+    Vector3 direction = Vector3.zero;
+
+    private void Awake()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnBasicMovement(InputValue value)
     {
-        
+        direction = value.Get<Vector2>();
     }
-   void OnBasicMovement()
-    {
 
+    private void FixedUpdate()
+    {
+        Debug.Log(direction);
+        transform.position += direction;
     }
 }

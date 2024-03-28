@@ -1,45 +1,87 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Block : MonoBehaviour
 {
-    private Rigidbody rb;
-    private bool isOnEdge = false;
-    private Transform edgeCenter;
-    // Start is called before the first frame update
-    void Start()
+    [Header("Objects")]
+    [SerializeField]
+    Rigidbody rb;
+    [SerializeField]
+    TypeOfBlock blockType;
+    [SerializeField]
+    TopEdgeCollider[] topEdge;
+    [SerializeField]
+    BottomEdgeCollider[] bottomEdge;
+
+    bool isOnEdge, isGrabbed;
+
+    public bool grounded;
+
+    private void FixedUpdate()
     {
-       rb = GetComponent<Rigidbody>();
+        isOnEdge = CheckEdgeStatus();
+        grounded = CheckGroundedStatus();
+
+        if (isOnEdge && grounded)
+            BlockBehavior();
+        else
+            BlockFall();
     }
 
-    // Update is called once per frame
-    void Update()
+    private bool CheckEdgeStatus()
     {
-        
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.CompareTag ("Top Edge"))
+        foreach (TopEdgeCollider edge in topEdge) 
         {
-            Edge();
-            edgeCenter = GetComponentInChildren<Transform>();
+            if (edge.OnEdge)
+                return true;
+        }
+        foreach (BottomEdgeCollider edge in bottomEdge)
+        {
+            if (edge.OnEdge)
+                return true;
+        }
+        return false;
+    }
+    private bool CheckGroundedStatus()
+    {
+        foreach (TopEdgeCollider edge in topEdge) 
+        {
+            if (edge.Grounded)
+                return true;
+        }
+        foreach (BottomEdgeCollider edge in bottomEdge)
+        {
+            if (edge.Grounded)
+                return true;
+        }
+        return false;
+    }
 
-        }
-    }
-    private void OnTriggerExit(Collider other)
+    private void BlockBehavior()
     {
-        if(other.gameObject.CompareTag("Top Edge"))
+        if (rb.position.y > (int)rb.position.y + 0.75f)
+            rb.position = new((int)rb.position.x, (int)rb.position.y + 1, (int)rb.position.z);
+        else
+            rb.position = new((int)rb.position.x, (int)rb.position.y, (int)rb.position.z);
+    }
+    private void BlockFall()
+    {
+        rb.position = Vector3.MoveTowards(rb.position, rb.position - new Vector3(0, 1, 0), Time.deltaTime);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Ground"))
         {
-            
+            grounded = true;
         }
-        isOnEdge = false;
     }
-    void Edge()
-    {
-        isOnEdge = true;
-        rb.useGravity = false;
-        rb.isKinematic = true;
-        
-    }
+}
+
+public enum TypeOfBlock
+{
+    Moveable,
+    Immovable
 }

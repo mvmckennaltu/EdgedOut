@@ -25,12 +25,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnBasicMovement(InputValue value)
     {
-        direction = value.Get<Vector2>();
+        Vector2 temp = value.Get<Vector2>();
+        direction = new(temp.x, direction.x , temp.y);
     }
 
     private void FixedUpdate()
     {
         Debug.Log(direction);
-        transform.position += direction;
+        if (direction == Vector3.zero)
+        {
+            transform.position += direction;
+        }
     }
 }

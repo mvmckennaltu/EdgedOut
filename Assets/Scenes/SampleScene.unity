@@ -191,6 +191,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &80336098 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 9093859325818998918, guid: bdd81a3edad1a3c4e98073b4ee5b3be1,
+    type: 3}
+  m_PrefabInstance: {fileID: 325556087}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &139683719
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,9 +339,19 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7445327459811680565, guid: bdd81a3edad1a3c4e98073b4ee5b3be1,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 434772352251022836, guid: bdd81a3edad1a3c4e98073b4ee5b3be1,
         type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 434772352251022836, guid: bdd81a3edad1a3c4e98073b4ee5b3be1,
+        type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 2069281435746121886, guid: bdd81a3edad1a3c4e98073b4ee5b3be1,
@@ -343,6 +359,11 @@ PrefabInstance:
       propertyPath: m_NotificationBehavior
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5427342860221370230, guid: bdd81a3edad1a3c4e98073b4ee5b3be1,
+        type: 3}
+      propertyPath: coll
+      value: 
+      objectReference: {fileID: 80336098}
     - target: {fileID: 5427342860221370230, guid: bdd81a3edad1a3c4e98073b4ee5b3be1,
         type: 3}
       propertyPath: PInput.m_Id
@@ -426,6 +447,11 @@ PrefabInstance:
     - target: {fileID: 7708057897058898724, guid: bdd81a3edad1a3c4e98073b4ee5b3be1,
         type: 3}
       propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9093859325818998918, guid: bdd81a3edad1a3c4e98073b4ee5b3be1,
+        type: 3}
+      propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -14,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     [Tooltip("Player Speed")]
     float speed;
+    [Header("Raycasts")]
+    [SerializeField]
+    RaycastHit aboveHit, frontHit, upHit, downHit, backHit;
 
     Vector3Int adjustedPlayerPos;
     Vector3 direction = Vector3.zero;
@@ -36,5 +39,10 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.position += direction;
         }
+    }
+
+    void MovementRaycast()
+    {
+
     }
 }

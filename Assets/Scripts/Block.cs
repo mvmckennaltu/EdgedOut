@@ -28,6 +28,10 @@ public class Block : MonoBehaviour
             BlockBehavior();
         else
             BlockFall();
+        if(isGrabbed && grounded)
+        {
+
+        }
     }
 
     private bool CheckEdgeStatus()
@@ -69,6 +73,14 @@ public class Block : MonoBehaviour
     private void BlockFall()
     {
         rb.position = Vector3.MoveTowards(rb.position, rb.position - new Vector3(0, 1, 0), Time.deltaTime);
+    }
+    public void BlockGrabMove(Vector2 direction)
+    {
+        Vector3 targetPosition = new Vector3(
+        rb.position.x + direction.x,
+        rb.position.y,
+        rb.position.z + direction.y
+    );
     }
 
     private void OnTriggerStay(Collider other)

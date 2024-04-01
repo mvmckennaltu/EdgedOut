@@ -9,27 +9,20 @@ public class BlockCheckers : MonoBehaviour
     public static event Action<TypeOfChecker, bool> CheckedBlock;
 
     [SerializeField] TypeOfChecker checkerType;
-    private bool isTriggered = false;
+    private bool isOnBlock = false;
 
-    private void OnTriggerStay(Collider other)
+    private void FixedUpdate()
     {
-        if (other.CompareTag("Block") && !isTriggered)
-        {
-            Debug.Log($"Block entered {checkerType} checker");
-            CheckedBlock(checkerType, true);
-            isTriggered = true;
-        }
-    }
+        // Check if the checker is on a block
+        Collider[] colliders = Physics.OverlapBox(transform.position, transform.lossyScale / 2f, transform.rotation, LayerMask.GetMask("Block"));
+        bool newIsOnBlock = colliders.Length > 0;
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Block"))
+        // If the collision state has changed, invoke the event
+        if (newIsOnBlock != isOnBlock)
         {
-            Debug.Log($"Block exited {checkerType} checker");
-            CheckedBlock(checkerType, false);
-            isTriggered = false;
+            isOnBlock = newIsOnBlock;
+            CheckedBlock?.Invoke(checkerType, isOnBlock);
         }
-            
     }
 }
 
@@ -43,5 +36,11 @@ public enum TypeOfChecker
     FrontDownDownDiag,
     Back,
     BackDownDiag,
-    BackDownDownDiag
+    BackDownDownDiag,
+    UpLeft,
+    UpRight,
+    Left,
+    Right,
+    FrontUpLeft,
+    FrontUpRight
 }

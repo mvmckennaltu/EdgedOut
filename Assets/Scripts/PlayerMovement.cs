@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Components")]
@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     float speed;
 
     [Tooltip("Colliders checking if there is a block inside")]
-    bool UColl,DColl, FColl, FUColl, FDColl, FDDColl, BColl, BDColl, BDDColl;
+    bool UColl,DColl, FColl, FUColl, FDColl, FDDColl, BColl, BDColl, BDDColl,ULColl,URColl, LColl, RColl,FULColl,FURColl;
     bool isMoving, canMove, canLedge, canGoDown, canGoUp, canGrab, grabbing, ledged;
     Block block;
 
@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         BlockCheckers.CheckedBlock += BlockContacted;
+        DColl = true;
     }
     private void OnDestroy()
     {
@@ -70,24 +71,73 @@ public class PlayerMovement : MonoBehaviour
             case TypeOfChecker.BackDownDownDiag:
                 BDDColl = value;
                 break;
+            case TypeOfChecker.UpLeft:
+                ULColl = value;
+                break;
+            case TypeOfChecker.UpRight:
+                URColl = value;
+                break;
+            case TypeOfChecker.Left:
+                LColl = value;
+                break;
+            case TypeOfChecker.Right:
+                RColl = value;
+                break;
+            case TypeOfChecker.FrontUpLeft:
+                FULColl = value;
+                break;
+            case TypeOfChecker.FrontUpRight:
+                FURColl = value;
+                break;
+            case TypeOfChecker.Down:
+                DColl = value;
+                break;
         }
     }
 
     private void OnBasicMovement(InputValue value)
     {
-        Vector2 temp = value.Get<Vector2>();
-        direction = new(temp.x, 0, temp.y);
-        isMoving = direction != Vector3.zero;
+        if(!Pause.isPaused)
+        {
+            Vector2 temp = value.Get<Vector2>();
+            direction = new(temp.x, 0, temp.y);
+            isMoving = direction != Vector3.zero;
+        }
+        
     }
    private void OnGrab()
     {
-        
+        if (FColl && !grabbing && !ledged)
+        {
+            grabbing = true;
+            Debug.Log("Grabbed!");
+
+        }
+        if (grabbing== true)
+        {
+            grabbing= false;
+        }
+    }
+    private void OnDrop()
+    {
+        if (ledged == true)
+        {
+            ledged = false;
+        }
     }
 
     private void FixedUpdate()
     {
-        if (isMoving)
-            Move();   
+        if (isMoving && !grabbing)
+            Move();
+
+        if (!DColl && !ledged)
+        {
+            playerTransform.position = Vector3.MoveTowards(playerTransform.position, playerTransform.position - new Vector3(0, 2, 0), Time.deltaTime);
+        }
+
+        if (grabbing)
+            MoveGrab();
     }
 
     private void Move()
@@ -97,20 +147,20 @@ public class PlayerMovement : MonoBehaviour
         
         if (facIsDir)
         {
-            canMove = !FColl && FDColl;
-            canGoUp = !UColl && !FUColl && FColl;
-            canGoDown = !FColl && !FDColl && FDDColl;
-            canLedge = !FColl && !BColl && !BDColl && !BDDColl;
-            canGrab = FColl;
+            canMove = !FColl && FDColl && !ledged;
+            canGoUp = !UColl && !FUColl && FColl && !ledged;
+            canGoDown = !FColl && !FDColl && FDDColl && !ledged;
+            canLedge = !FColl && !FDColl && !FDDColl && !ledged;
+            canGrab = FColl && !ledged;
             if (canMove) MoveForward();
             if (canGoUp) MoveUp();
             if (canGoDown) MoveDown();
-            //if (canLedge) MoveLedge();
-            //if (canGrab && grabbing) MoveGrab();
+            if (canLedge && direction != Vector3.zero) MoveLedge();
+            if (canGrab && grabbing) MoveGrab();
         }
         else
         {
-            if (ledged) MoveToSideLedge();
+            if (ledged) MoveOnLedge();
             else TurnPlayer();
         }
 
@@ -119,6 +169,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void TurnPlayer()
     {
+        Debug.Log("Turning!");
         if (!grabbing)
         {
             if (direction.x > 0)
@@ -137,26 +188,62 @@ public class PlayerMovement : MonoBehaviour
             {
                 facing = Vector3.back;
             }
+            playerTransform.rotation = Quaternion.LookRotation(facing);
         }
         
 
         // Rotate the player to face the new direction
-        playerTransform.rotation = Quaternion.LookRotation(facing);
+        
     }
 
-    private void MoveToSideLedge()
+    private void MoveOnLedge() //handles movement when the player is on a ledge
     {
+        Debug.Log("Moving on a ledge!");
         if (direction.x != 0)
         {
             Vector3 targetPosition = playerTransform.position;
-            targetPosition.x += direction.x;
+            if (facing == Vector3.forward || facing == Vector3.back)
+            {
+                targetPosition.x += direction.x;
+            }
+            else
+            {
+                targetPosition.z += direction.z;
+            }
+            
+
+            // Check if there is a block adjacent to the left or right
+            if ((direction.x < 0 && (LColl && !ULColl)) || (direction.x > 0 && (RColl || !URColl)))
+            {
+                StartCoroutine(SmoothMove(targetPosition));
+            }
+            else
+            {
+                // Shuffle to the other side of the block
+                targetPosition.z += facing.z;
+
+                // Check if there is a block on the other side
+                if (!FULColl && !FURColl)
+                {
+                    StartCoroutine(SmoothMove(targetPosition));
+                }
+            }
+        }
+        else if (direction.z < 0 && !UColl && !FUColl)
+        {
+            // Move back up from the ledge
+            Debug.Log("Moving up from a ledge!");
+            Vector3 targetPosition = playerTransform.position;
+            targetPosition.y += .5f;
             StartCoroutine(SmoothMove(targetPosition));
             ledged = false;
+            
         }
     }
 
     private void MoveForward()
     {
+        Debug.Log("Moving forward!");
         Vector3 targetPosition = new Vector3(
         Mathf.Round(playerTransform.position.x + facing.x),
         playerTransform.position.y,
@@ -169,6 +256,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MoveUp()
     {
+        Debug.Log("Going up!");
         Vector3 targetPosition = new Vector3(
             Mathf.Round(playerTransform.position.x + facing.x), playerTransform.position.y + 1, playerTransform.position.z + facing.z);
         if (targetPosition != playerTransform.position)
@@ -179,6 +267,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MoveDown()
     {
+        Debug.Log("Going down!");
         Vector3 targetPosition = new Vector3(
            Mathf.Round(playerTransform.position.x + facing.x), playerTransform.position.y -1, playerTransform.position.z + facing.z);
         if (targetPosition != playerTransform.position)
@@ -189,32 +278,47 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MoveLedge()
     {
-     /*   Vector3 targetPosition = playerTransform.position + facing;
-        targetPosition.y = playerTransform.position.y;
+        Debug.Log("Ledging!");
+        Vector3 targetPosition = playerTransform.position + facing;
+        targetPosition.y = Mathf.Round(playerTransform.position.y) - 0.5f;
 
         if (targetPosition != playerTransform.position)
         {
             StartCoroutine(SmoothMove(targetPosition));
-        }*/
+            ledged = true;
+            facing = -facing;
+            playerTransform.rotation = Quaternion.LookRotation(facing);
+        }
     }
     private void MoveGrab()
     {
-        if (!BColl)
+        if (direction == -facing)
         {
-            Vector3 targetPosition = playerTransform.position + direction;
-            block.BlockGrabMove(direction);
+            // Pull the block
+            Vector3 targetPosition = playerTransform.position - facing;
+            if (block != null)
+            {
+                block.BlockGrabMove(-facing);
+                StartCoroutine(SmoothMove(targetPosition));
+            }
 
             // Check if there is no ground beneath the player after moving back
             if (!DColl)
             {
                 // Automatically ledge onto the ledge of the block
-                Vector3 ledgePosition = playerTransform.position;
-                ledgePosition.y = block.transform.position.y;
-                StartCoroutine(SmoothMove(ledgePosition));
-                ledged = true;
+                MoveLedge();
+                grabbing = false;
             }
         }
-
+        else if (direction == facing)
+        {
+            // Push the block
+            if (block != null)
+            {
+                block.BlockGrabMove(facing);
+                grabbing = false;
+            }
+        }
     }
     private IEnumerator SmoothMove(Vector3 targetPosition)
     {
@@ -225,11 +329,45 @@ public class PlayerMovement : MonoBehaviour
 
         while (elapsedTime < duration)
         {
-            playerTransform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
+            if (Time.timeScale > 0f)
+            {
+                playerTransform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+                elapsedTime += Time.deltaTime;
+            }
+            
             yield return null;
         }
 
         playerTransform.position = targetPosition;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Goal"))
+            {
+            if(LevelProgression.currentLevel == 1)
+            {
+                LevelProgression.level1Complete = true;
+            }
+            if(LevelProgression.currentLevel == 2)
+            {
+                LevelProgression.level2Complete = true;
+            }
+            if(LevelProgression.currentLevel == 3 )
+            {
+                LevelProgression.level3Complete = true;
+            }
+            //SceneManager.LoadScene("MainMenu");
+        }
+        if (other.CompareTag("Block"))
+        {
+            block = other.GetComponent<Block>();
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Block"))
+        {
+            block = null;
+        }
     }
 }

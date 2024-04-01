@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Pause : MonoBehaviour
 {
-    bool isPaused;
+    public static bool isPaused = false;
     public GameObject pauseText;
     public GameObject mainMenuButton;
     public GameObject exitButton;
@@ -15,13 +15,13 @@ public class Pause : MonoBehaviour
        if(!isPaused)
         {
             isPaused = true;
-            Time.timeScale = 1.0f;
+            Time.timeScale = 0.0f;
             pauseText.SetActive(true); mainMenuButton.SetActive(true); resetButton.SetActive(true); exitButton.SetActive(true);
         }
         else
         {
             isPaused = false;
-            Time.timeScale = 0.0f;
+            Time.timeScale = 1.0f;
             pauseText.SetActive(false); mainMenuButton.SetActive(false); exitButton.SetActive(false); resetButton.SetActive(false);
         }
     }

@@ -74,13 +74,10 @@ public class Block : MonoBehaviour
     {
         rb.position = Vector3.MoveTowards(rb.position, rb.position - new Vector3(0, 1, 0), Time.deltaTime);
     }
-    public void BlockGrabMove(Vector2 direction)
+    public void BlockGrabMove(Vector3 direction)
     {
-        Vector3 targetPosition = new Vector3(
-        rb.position.x + direction.x,
-        rb.position.y,
-        rb.position.z + direction.y
-    );
+        Vector3 targetPosition = rb.position + direction;
+        StartCoroutine(SmoothBlockMove(targetPosition));
     }
 
     private void OnTriggerStay(Collider other)
@@ -89,6 +86,25 @@ public class Block : MonoBehaviour
         {
             grounded = true;
         }
+    }
+    private IEnumerator SmoothBlockMove(Vector3 targetPosition)
+    {
+        float elapsedTime = 0f;
+        float duration = 0.2f;
+
+        Vector3 startPosition = rb.position;
+
+        while (elapsedTime < duration)
+        {
+            if (Time.timeScale > 0f)
+            {
+                rb.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+                elapsedTime += Time.unscaledDeltaTime;
+            }
+            yield return null;
+        }
+
+        rb.position = targetPosition;
     }
 }
 

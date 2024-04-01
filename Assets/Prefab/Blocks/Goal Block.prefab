@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 783675647584995028}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Center Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3671584076812328699}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Top Edges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 6880619530632180101}
   - component: {fileID: 8212605815707726112}
   - component: {fileID: 6881450537441308485}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Edge (2)
   m_TagString: Bottom Edge
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 3395720938089588425}
   - component: {fileID: 9056957259554735479}
   - component: {fileID: 2244642873872588365}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Edge
   m_TagString: Bottom Edge
   m_Icon: {fileID: 0}
@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 1749363141355198117}
   - component: {fileID: 4183682120445732206}
   - component: {fileID: 6047462680039398203}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Edge
   m_TagString: Bottom Edge
   m_Icon: {fileID: 0}
@@ -415,7 +415,7 @@ GameObject:
   - component: {fileID: 5689544017409374402}
   - component: {fileID: 3976948589547658770}
   - component: {fileID: 6613448263721329780}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Edge (1)
   m_TagString: Bottom Edge
   m_Icon: {fileID: 0}
@@ -527,7 +527,7 @@ GameObject:
   - component: {fileID: 7282221550739888950}
   - component: {fileID: 8067160145170253467}
   - component: {fileID: 2445137234658389571}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Edge (1)
   m_TagString: Top Edge
   m_Icon: {fileID: 0}
@@ -634,7 +634,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5327793626634407545}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Center Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -670,7 +670,7 @@ GameObject:
   - component: {fileID: 7964013042212457990}
   - component: {fileID: 7573402202857333936}
   - component: {fileID: 6398899545558651936}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Goal Block
   m_TagString: Block
   m_Icon: {fileID: 0}
@@ -807,7 +807,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7237341691777467323}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bottom Edges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -846,7 +846,7 @@ GameObject:
   - component: {fileID: 2728090419569778908}
   - component: {fileID: 955059528568047295}
   - component: {fileID: 1915455039159793409}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Edge
   m_TagString: Top Edge
   m_Icon: {fileID: 0}
@@ -953,7 +953,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4830756734071665095}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Center Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -988,7 +988,7 @@ GameObject:
   - component: {fileID: 1062303129406323826}
   - component: {fileID: 594862188910512065}
   - component: {fileID: 5308190846336234403}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Edge (2)
   m_TagString: Top Edge
   m_Icon: {fileID: 0}
@@ -1095,7 +1095,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3796290936963931191}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Center Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1130,7 +1130,7 @@ GameObject:
   - component: {fileID: 6213485212907320277}
   - component: {fileID: 4334248716191265042}
   - component: {fileID: 2496913983356031930}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Edge
   m_TagString: Top Edge
   m_Icon: {fileID: 0}

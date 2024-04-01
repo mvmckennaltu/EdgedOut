@@ -9,11 +9,12 @@ TagManager:
   - Top Edge
   - Block
   - Ground
+  - Goal
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Block
   - Water
   - UI
   - 

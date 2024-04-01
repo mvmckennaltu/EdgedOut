@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2793744943676852310}
   - component: {fileID: 18288710495483206}
   - component: {fileID: 4319655948323796655}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FrontDownDiag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 4822659354259901531}
   - component: {fileID: 23376274485687765}
   - component: {fileID: 2782784108857519483}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 4050020780993738545}
   - component: {fileID: 8271176383332157842}
   - component: {fileID: 519784880880248624}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: UpLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,9 +193,9 @@ GameObject:
   - component: {fileID: 5427342860221370230}
   - component: {fileID: 2069281435746121886}
   - component: {fileID: 7339003776374643997}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -208,7 +208,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434772352251022836}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.742198, y: 4.094091, z: -2.6013622}
+  m_LocalPosition: {x: 5, y: 4.094091, z: -2.6013622}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -293,10 +293,10 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &5427342860221370230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 5681080933858687166}
   - component: {fileID: 5036608173396231033}
   - component: {fileID: 4688861836114090474}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -444,7 +444,7 @@ GameObject:
   - component: {fileID: 6498724519534010910}
   - component: {fileID: 2332726850255448738}
   - component: {fileID: 4654205499198784088}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -503,7 +503,7 @@ GameObject:
   - component: {fileID: 1940588016599582266}
   - component: {fileID: 8045028895539558382}
   - component: {fileID: 8317067505554859132}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -562,7 +562,7 @@ GameObject:
   - component: {fileID: 5661334941903731090}
   - component: {fileID: 1673767357026885893}
   - component: {fileID: 6250197121677884230}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FrontUpLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -621,7 +621,7 @@ GameObject:
   - component: {fileID: 7960474349646821802}
   - component: {fileID: 9077355914408368843}
   - component: {fileID: 2201860061954239901}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -678,7 +678,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3859364051936052998}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BoxCheckers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -725,7 +725,7 @@ GameObject:
   - component: {fileID: 7221919373744493165}
   - component: {fileID: 2753094744220533083}
   - component: {fileID: 8727924203889621926}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FrontUpRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -785,7 +785,7 @@ GameObject:
   - component: {fileID: 7759698400470466289}
   - component: {fileID: 8033949241797343572}
   - component: {fileID: 1731184416988545033}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Nose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -835,7 +835,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bc7b382a869848c49aed3682b17aba6e, type: 2}
+  - {fileID: 2100000, guid: 2e1268d4655aa6e49b26627579f7dd0e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -882,7 +882,7 @@ GameObject:
   - component: {fileID: 1493430506420902470}
   - component: {fileID: 6434145245729251511}
   - component: {fileID: 3876533440660253557}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: UpRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -941,7 +941,7 @@ GameObject:
   - component: {fileID: 6767561169599608587}
   - component: {fileID: 1393065556730256647}
   - component: {fileID: 4465974591148274401}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FrontDownDownDiag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1000,7 +1000,7 @@ GameObject:
   - component: {fileID: 9071608181459869871}
   - component: {fileID: 291292509203472935}
   - component: {fileID: 3918485606539669107}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FrontUpDiag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1059,7 +1059,7 @@ GameObject:
   - component: {fileID: 6553743630399835103}
   - component: {fileID: 4237457582265989704}
   - component: {fileID: 1374390290328361441}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1118,7 +1118,7 @@ GameObject:
   - component: {fileID: 5782494873992692805}
   - component: {fileID: 4283058225051856173}
   - component: {fileID: 8428396932634801325}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BackDownDiag
   m_TagString: Untagged
   m_Icon: {fileID: 0}

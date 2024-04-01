@@ -29,8 +29,10 @@ public class PlayerMovement : MonoBehaviour
 
     [Tooltip("Colliders checking if there is a block inside")]
     bool UColl,DColl, FColl, FUColl, FDColl, FDDColl, BColl, BDColl, BDDColl,ULColl,URColl, LColl, RColl,FULColl,FURColl;
-    bool isMoving, canMove, canLedge, canGoDown, canGoUp, canGrab, grabbing, ledged;
+    bool isMoving, canMove, canLedge, canGoDown, canGoUp, canGrab, grabbing; 
+        bool ledged = false;
     Block block;
+    private List<Block> interactingBlocks = new List<Block>();
 
     Vector3 direction = Vector3.forward, facing = Vector3.forward;
     private void Awake()
@@ -113,10 +115,7 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Grabbed!");
 
         }
-        if (grabbing== true)
-        {
-            grabbing= false;
-        }
+        
     }
     private void OnDrop()
     {
@@ -292,31 +291,33 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MoveGrab()
     {
-        if (direction == -facing)
+        if (interactingBlocks.Count > 0)
         {
-            // Pull the block
-            Vector3 targetPosition = playerTransform.position - facing;
-            if (block != null)
-            {
-                block.BlockGrabMove(-facing);
-                StartCoroutine(SmoothMove(targetPosition));
-            }
+            Block facingBlock = GetFacingBlock();
 
-            // Check if there is no ground beneath the player after moving back
-            if (!DColl)
+            if (facingBlock != null)
             {
-                // Automatically ledge onto the ledge of the block
-                MoveLedge();
-                grabbing = false;
-            }
-        }
-        else if (direction == facing)
-        {
-            // Push the block
-            if (block != null)
-            {
-                block.BlockGrabMove(facing);
-                grabbing = false;
+                if (direction == -facing)
+                {
+                    // Pull the block
+                    Vector3 targetPosition = playerTransform.position - facing;
+                    facingBlock.BlockGrabMove(-facing);
+                    StartCoroutine(SmoothMove(targetPosition));
+
+                    // Check if there is no ground beneath the player after moving back
+                    if (!DColl)
+                    {
+                        // Automatically ledge onto the ledge of the block
+                        MoveLedge();
+                        grabbing = false;
+                    }
+                }
+                else if (direction == facing)
+                {
+                    // Push the block
+                    facingBlock.BlockGrabMove(facing);
+                    grabbing = false;
+                }
             }
         }
     }
@@ -358,16 +359,43 @@ public class PlayerMovement : MonoBehaviour
             }
             //SceneManager.LoadScene("MainMenu");
         }
-        if (other.CompareTag("Block"))
+        if(other.CompareTag("Death"))
         {
-            block = other.GetComponent<Block>();
+            SceneManager.LoadScene("GameOver");
+        }
+        if (other.CompareTag("Face"))
+        {
+            Block block = other.GetComponentInParent<Block>();
+            if (block != null && !interactingBlocks.Contains(block))
+            {
+                interactingBlocks.Add(block);
+            }
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Block"))
+        if (other.CompareTag("Face"))
         {
-            block = null;
+            Block block = other.GetComponentInParent<Block>();
+            if (block != null && interactingBlocks.Contains(block))
+            {
+                interactingBlocks.Remove(block);
+            }
         }
+    }
+    private Block GetFacingBlock()
+    {
+        foreach (Block block in interactingBlocks)
+        {
+            Vector3 directionToBlock = block.transform.position - playerTransform.position;
+            float angle = Vector3.Angle(directionToBlock, facing);
+
+            if (angle <= 45f) // Adjust the angle threshold as needed
+            {
+                return block;
+            }
+        }
+
+        return null;
     }
 }

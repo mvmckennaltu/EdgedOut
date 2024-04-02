@@ -9,9 +9,6 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField]
-    [Tooltip("Player inputs")]
-    PlayerInput PInput;
-    [SerializeField]
     [Tooltip("Player Collider")]
     Collider coll;
     [SerializeField]
@@ -33,12 +30,17 @@ public class PlayerMovement : MonoBehaviour
         bool ledged = false;
     Block block;
     private List<Block> interactingBlocks = new List<Block>();
+    Rigidbody rb;
+    private AudioSource audioSource;
+    public AudioClip upClip;  
+    public AudioClip downClip;
 
     Vector3 direction = Vector3.forward, facing = Vector3.forward;
     private void Awake()
     {
         BlockCheckers.CheckedBlock += BlockContacted;
-        DColl = true;
+        rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
     private void OnDestroy()
     {
@@ -104,24 +106,33 @@ public class PlayerMovement : MonoBehaviour
             Vector2 temp = value.Get<Vector2>();
             direction = new(temp.x, 0, temp.y);
             isMoving = direction != Vector3.zero;
+            Debug.Log("OnBasicMovement called. Direction: " + direction);
         }
         
     }
    private void OnGrab()
     {
+
         if (FColl && !grabbing && !ledged)
         {
             grabbing = true;
             Debug.Log("Grabbed!");
-
         }
-        
+
     }
     private void OnDrop()
     {
         if (ledged == true)
         {
             ledged = false;
+        }
+    }
+    private void OnUngrab()
+    {
+        if (grabbing)
+        {
+            grabbing = false;
+            Debug.Log("Ungrabbed!");
         }
     }
 
@@ -132,7 +143,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (!DColl && !ledged)
         {
-            playerTransform.position = Vector3.MoveTowards(playerTransform.position, playerTransform.position - new Vector3(0, 2, 0), Time.deltaTime);
+            rb.useGravity = true;
+        }
+        else
+        {
+            rb.useGravity = false;
+            rb.velocity = Vector3.zero;
         }
 
         if (grabbing)
@@ -256,6 +272,7 @@ public class PlayerMovement : MonoBehaviour
     private void MoveUp()
     {
         Debug.Log("Going up!");
+        audioSource.PlayOneShot(upClip);
         Vector3 targetPosition = new Vector3(
             Mathf.Round(playerTransform.position.x + facing.x), playerTransform.position.y + 1, playerTransform.position.z + facing.z);
         if (targetPosition != playerTransform.position)
@@ -267,6 +284,7 @@ public class PlayerMovement : MonoBehaviour
     private void MoveDown()
     {
         Debug.Log("Going down!");
+        audioSource.PlayOneShot(downClip);
         Vector3 targetPosition = new Vector3(
            Mathf.Round(playerTransform.position.x + facing.x), playerTransform.position.y -1, playerTransform.position.z + facing.z);
         if (targetPosition != playerTransform.position)
@@ -287,6 +305,8 @@ public class PlayerMovement : MonoBehaviour
             ledged = true;
             facing = -facing;
             playerTransform.rotation = Quaternion.LookRotation(facing);
+            rb.useGravity = false;
+            rb.velocity = Vector3.zero;
         }
     }
     private void MoveGrab()
@@ -295,28 +315,32 @@ public class PlayerMovement : MonoBehaviour
         {
             Block facingBlock = GetFacingBlock();
 
-            if (facingBlock != null)
+            if (facingBlock != null && facingBlock.isMoveable)
             {
-                if (direction == -facing)
-                {
-                    // Pull the block
-                    Vector3 targetPosition = playerTransform.position - facing;
-                    facingBlock.BlockGrabMove(-facing);
-                    StartCoroutine(SmoothMove(targetPosition));
+                Debug.Log("Move conditions met");
 
-                    // Check if there is no ground beneath the player after moving back
-                    if (!DColl)
+                if (Mathf.Approximately(playerTransform.position.y, facingBlock.transform.position.y))
+                {
+                    if (direction == -facing)
                     {
-                        // Automatically ledge onto the ledge of the block
-                        MoveLedge();
-                        grabbing = false;
+                        Debug.Log("Pulling!");
+                        // Pull the block
+                        Vector3 targetPosition = playerTransform.position - facing;
+                        if (!BColl)
+                        {
+                            StartCoroutine(PullBlock(facingBlock, targetPosition));
+                        }
+                    }
+                    else if (direction == facing)
+                    {
+                        Debug.Log("Pushing!");
+                        // Push the block
+                        facingBlock.BlockGrabMove(facing);
                     }
                 }
-                else if (direction == facing)
+                else
                 {
-                    // Push the block
-                    facingBlock.BlockGrabMove(facing);
-                    grabbing = false;
+                    Debug.Log("Block is not at the same level as the player.");
                 }
             }
         }
@@ -357,7 +381,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 LevelProgression.level3Complete = true;
             }
-            //SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("Victory");
         }
         if(other.CompareTag("Death"))
         {
@@ -369,6 +393,7 @@ public class PlayerMovement : MonoBehaviour
             if (block != null && !interactingBlocks.Contains(block))
             {
                 interactingBlocks.Add(block);
+                //Debug.Log("Added block to interactingBlocks");
             }
         }
     }
@@ -380,6 +405,7 @@ public class PlayerMovement : MonoBehaviour
             if (block != null && interactingBlocks.Contains(block))
             {
                 interactingBlocks.Remove(block);
+                //Debug.Log("Removed block from interactingBlocks");
             }
         }
     }
@@ -396,6 +422,25 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+
         return null;
+    }
+    private IEnumerator PullBlock(Block block, Vector3 targetPosition)
+    {
+        Debug.Log("Block position before pulling: " + block.transform.position);
+
+        block.BlockGrabMove(-facing);
+
+        Debug.Log("Block position after pulling: " + block.transform.position);
+
+        yield return StartCoroutine(SmoothMove(targetPosition));
+
+        // Check if there is no ground beneath the player after moving back
+        if (!DColl)
+        {
+            // Automatically ledge onto the ledge of the block
+            MoveLedge();
+            grabbing = false;
+        }
     }
 }

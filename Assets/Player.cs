@@ -51,7 +51,16 @@ public partial class @Player: IInputActionCollection2, IDisposable
                     ""id"": ""897c6184-86c2-4cfd-91d0-fc44112472a6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ungrab"",
+                    ""type"": ""Button"",
+                    ""id"": ""c9d9ce91-2e5b-4b68-be74-b341a2c8dc81"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=1)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -273,6 +282,39 @@ public partial class @Player: IInputActionCollection2, IDisposable
                     ""action"": ""Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f9c01f5b-5168-4369-a0fb-e79a3fa99504"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ungrab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d91e52fe-709b-4ad3-9a14-c2b367958a1e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ungrab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4c3c37a7-e8e0-472f-9899-61bf02a85532"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ungrab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -284,6 +326,7 @@ public partial class @Player: IInputActionCollection2, IDisposable
         m_Movement_BasicMovement = m_Movement.FindAction("Basic Movement", throwIfNotFound: true);
         m_Movement_Pause = m_Movement.FindAction("Pause", throwIfNotFound: true);
         m_Movement_Grab = m_Movement.FindAction("Grab", throwIfNotFound: true);
+        m_Movement_Ungrab = m_Movement.FindAction("Ungrab", throwIfNotFound: true);
         m_Movement_Drop = m_Movement.FindAction("Drop", throwIfNotFound: true);
     }
 
@@ -349,6 +392,7 @@ public partial class @Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_BasicMovement;
     private readonly InputAction m_Movement_Pause;
     private readonly InputAction m_Movement_Grab;
+    private readonly InputAction m_Movement_Ungrab;
     private readonly InputAction m_Movement_Drop;
     public struct MovementActions
     {
@@ -357,6 +401,7 @@ public partial class @Player: IInputActionCollection2, IDisposable
         public InputAction @BasicMovement => m_Wrapper.m_Movement_BasicMovement;
         public InputAction @Pause => m_Wrapper.m_Movement_Pause;
         public InputAction @Grab => m_Wrapper.m_Movement_Grab;
+        public InputAction @Ungrab => m_Wrapper.m_Movement_Ungrab;
         public InputAction @Drop => m_Wrapper.m_Movement_Drop;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
@@ -376,6 +421,9 @@ public partial class @Player: IInputActionCollection2, IDisposable
             @Grab.started += instance.OnGrab;
             @Grab.performed += instance.OnGrab;
             @Grab.canceled += instance.OnGrab;
+            @Ungrab.started += instance.OnUngrab;
+            @Ungrab.performed += instance.OnUngrab;
+            @Ungrab.canceled += instance.OnUngrab;
             @Drop.started += instance.OnDrop;
             @Drop.performed += instance.OnDrop;
             @Drop.canceled += instance.OnDrop;
@@ -392,6 +440,9 @@ public partial class @Player: IInputActionCollection2, IDisposable
             @Grab.started -= instance.OnGrab;
             @Grab.performed -= instance.OnGrab;
             @Grab.canceled -= instance.OnGrab;
+            @Ungrab.started -= instance.OnUngrab;
+            @Ungrab.performed -= instance.OnUngrab;
+            @Ungrab.canceled -= instance.OnUngrab;
             @Drop.started -= instance.OnDrop;
             @Drop.performed -= instance.OnDrop;
             @Drop.canceled -= instance.OnDrop;
@@ -417,6 +468,7 @@ public partial class @Player: IInputActionCollection2, IDisposable
         void OnBasicMovement(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnGrab(InputAction.CallbackContext context);
+        void OnUngrab(InputAction.CallbackContext context);
         void OnDrop(InputAction.CallbackContext context);
     }
 }

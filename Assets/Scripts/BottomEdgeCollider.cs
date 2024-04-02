@@ -6,7 +6,8 @@ public class BottomEdgeCollider : MonoBehaviour
 {
     [SerializeField]
     GameObject parentBlock;
-
+    [SerializeField]
+    //ParticleSystem particle;
     bool isOnEdge, isGrounded;
 
     public bool OnEdge => isOnEdge;

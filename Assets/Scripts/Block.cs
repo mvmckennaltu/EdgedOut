@@ -16,6 +16,7 @@ public class Block : MonoBehaviour
     BottomEdgeCollider[] bottomEdge;
 
     bool isOnEdge, isGrabbed;
+    public bool isMoveable;
 
     public bool grounded;
 
@@ -76,8 +77,35 @@ public class Block : MonoBehaviour
     }
     public void BlockGrabMove(Vector3 direction)
     {
+        Debug.Log("BlockGrabMove called. Direction: " + direction);
         Vector3 targetPosition = rb.position + direction;
+
+        // Check if there are any blocks in the pushing direction
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, direction, 1f);
+        List<Block> blocksToMove = new List<Block>();
+
+        foreach (RaycastHit hit in hits)
+        {
+            Block block = hit.collider.GetComponent<Block>();
+            if (block != null && block.isMoveable)
+            {
+                blocksToMove.Add(block);
+            }
+            else
+            {
+                // If there is an immovable block, stop pushing
+                return;
+            }
+        }
+
+        // Move the current block
         StartCoroutine(SmoothBlockMove(targetPosition));
+
+        // Move any adjacent moveable blocks
+        foreach (Block block in blocksToMove)
+        {
+            block.BlockGrabMove(direction);
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -96,11 +124,8 @@ public class Block : MonoBehaviour
 
         while (elapsedTime < duration)
         {
-            if (Time.timeScale > 0f)
-            {
-                rb.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
-                elapsedTime += Time.unscaledDeltaTime;
-            }
+            rb.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
 
